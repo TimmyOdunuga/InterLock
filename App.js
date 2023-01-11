@@ -1,21 +1,42 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import Home from './screens/home'
+import OnBoardingScreen from './screens/onBoardingScreen'
+import HomeStackNavigator from "./navigation/stackNavigation"
+import LoginNavigator from "./navigation/loginStackNavigation"
+import { AuthContext, AuthContainer } from './auth/authContext'
+import Alert from './components/alert'
+
+
+
+
+
+
 
 export default function App() {
+  const [userState, setUserState] = useState(null)
+
+
+  //Set user on user state available 
+  useEffect(() => {
+    setUserState(false)
+  }, []);
+
+
+  //change from OnBoardingScreen to Home screen
+  const setUser = () => setUserState(true)
+
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <AuthContainer>
+      <StatusBar
+        backgroundColor="black"
+        barStyle='default'
+        hidden={false} />
+      {userState ? <HomeStackNavigator />
+        : <LoginNavigator setUser={setUser} />}
+    </AuthContainer>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
